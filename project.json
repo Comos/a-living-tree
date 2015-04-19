@@ -1,0 +1,10 @@
+{
+    "debugMode"     : 1,
+    "frameRate"     : 60,
+    "showFPS"	    : false,
+    "id"            : "gameCanvas",
+    "renderMode"    : 1,
+    "jsList"        : [
+    	"app/resource.js"
+    ]
+}
