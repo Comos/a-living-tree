@@ -16,8 +16,8 @@ return cc.Layer.extend({
 		{
 			for (var j=0; j<2; j++)
 			{
-				this._name = i.toString()+'-'+j.toString();
-				var bgSprite = new cc.Sprite('res/bg/'+this._name+'.jpg');
+				this._name = i.toString()+j.toString();
+				var bgSprite = new cc.Sprite(res['bg_'+this._name]);
 				bgSprite.setPosition(0,0);
 				bgSprite.setAnchorPoint(0,0);
 				bgSprite.setOpacity(0);

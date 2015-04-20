@@ -11,7 +11,7 @@ define(function(require) {
 		dateindex: 0,
 		dateobj: 0,
 		_weatherDataContainer: {},
-		_monthEn: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Dec', 'Nov'],
+		_monthEn: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 
 		ctor: function(dateobj) {
 			this._date = dateobj;
@@ -145,7 +145,7 @@ define(function(require) {
 			{
 				second=1;
 			}
-			return first.toString()+'-'+second.toString();
+			return first.toString()+second.toString();
 		},
 		isChange: function() {
 			if (this._schedule_num%this._speed == 0)

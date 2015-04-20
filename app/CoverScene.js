@@ -12,8 +12,6 @@ define(function(require) {
 				this
 			);
 			menuItem.setNormalizedPosition(0.73,0.30);
-			menuItem.width = menuItem.width*0.6;
-			menuItem.height = menuItem.height*0.6;
 			var menu = new cc.Menu(menuItem);
 			menu.x = 0;
 			menu.y = 0;
