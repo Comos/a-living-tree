@@ -28,7 +28,7 @@ return cc.Layer.extend({
 		var wb = new Weibo(APP_KEY);
 		if (wb.isLogged()) {
 			wb.share(
-				'我的Living Tree收获了种子，欢迎大家都来种。'+ "http://hi-diving.com/index.html?seed=", 
+				'我的Living Tree收获了种子，欢迎大家都来种。'+ "http://hi-diving.com/a-living-tree?seed=", 
 				this.afterShare.bind(this),
 				function() {alert("分享失败，请重试。");}
 			);
