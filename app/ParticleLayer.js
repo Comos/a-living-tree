@@ -1,15 +1,15 @@
 define(function(require) {
 
+	var weatherManager = require('WeatherManager');
+	var dateManager = require('DateManager');
+
 return cc.Layer.extend({
-	_weatherManger: 0,
 	_forecast: 0,
 
-	ctor: function(weatherManger) {
+	ctor: function() {
 		this._super();
-		this._weatherManger = weatherManger
-
-		this._forecast = this._weatherManger.getWeather(this._weatherManger.dateindex)['forecast'];
-		season = this._weatherManger.getSeason(this._weatherManger._date);
+		this._forecast = weatherManager.getWeather(dateManager.getIndexDateStr())['forecast'];
+		season = weatherManager.getSeason(dateManager.getCurDate());
 
 		this._particleBigSnowList = new Array();
 		for (var i=0;i<4;i++)
@@ -95,8 +95,8 @@ return cc.Layer.extend({
 		}
 	},
 	setRealParticle: function() {
-		this._forecast = this._weatherManger.getWeather(this._weatherManger.dateindex)['forecast'];
-		season = this._weatherManger.getSeason(this._weatherManger._date);
+		this._forecast = weatherManager.getWeather(dateManager.getIndexDateStr())['forecast'];
+		season = weatherManager.getSeason(dateManager.getCurDate());
 
 		if (this._forecast == 'snowy' && season==0)
 		{
@@ -141,7 +141,7 @@ return cc.Layer.extend({
 		}		
 	},
 	update: function() {
-		if (this._weatherManger.isChange())
+		if (dateManager.isChanged())
 		{
 			this.setRealParticle();
 		}
