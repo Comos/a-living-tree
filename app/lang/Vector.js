@@ -43,6 +43,13 @@ define(function(require) {
 		mag: function() {
 			return Math.sqrt(this._x*this._x + this._y*this._y);
 		},
+		normalize: function() {
+			var mag = this.mag();
+			if (mag != 0) {
+				this._x = this._x / mag;
+				this._y = this._y / mag;
+			}
+		},
 		rotate: function(theta) {
 			var x = this._x,
 				y = this._y,			
