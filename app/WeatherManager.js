@@ -1,34 +1,21 @@
 define(function(require) {
 
-	return cc.Class.extend({
-		_dlNumMax: 3,
+	var dateManager = require('DateManager');
+
+	var WeatherManager = cc.Class.extend({
 		_dlNum: 0,
 		_layerCB: 0,
-		_date: 0,
-		_speed: 4,
-		_schedule_num: 0,
 		_pic_name: 0,
-		dateindex: 0,
-		dateobj: 0,
 		_weatherDataContainer: {},
-		_monthEn: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 
-		ctor: function(dateobj) {
-			this._date = dateobj;
-			this._lastDate = this._date;
-			this.dateindex=this.getdateString();
-			this.dateobj = this._date;
-		},
 		bindCB: function(layCB) {
 			this._layerCB = layCB;
 		},
-		getDateNumber:function() {
-			return this._date;
-		},
 		downloadWeatherData: function() {
-			cc.loader.loadTxt("./data/2012_SAPPORO", this.downloadWeatherDataCB.bind(this));
-			cc.loader.loadTxt("./data/2013_SAPPORO", this.downloadWeatherDataCB.bind(this));
-			cc.loader.loadTxt("./data/2014_SAPPORO", this.downloadWeatherDataCB.bind(this));
+			for (var year=dateManager.startYear; year<=dateManager.endYear; year++)
+			{
+				cc.loader.loadTxt('./data/'+year+'_'+'SAPPORO', this.downloadWeatherDataCB.bind(this));
+			}
 		},
 		downloadWeatherDataCB: function(err, text) {
 			var weatherText = new String(text);
@@ -52,9 +39,9 @@ define(function(require) {
 			}
 
 			this._dlNum++;
-			if (this._dlNum == this._dlNumMax)
+			if ( this._dlNum == (dateManager.endYear - dateManager.startYear+1) )
 			{
-				this._pic_name = this.getRealWeather(this._date)
+				this._pic_name = this.getRealWeather(dateManager.getCurDate());
 				this._layerCB();
 			}
 		},
@@ -76,10 +63,6 @@ define(function(require) {
 				return 'sunny';
 			}
 
-		},
-		setSpeed: function(speed)
-		{
-			this._speed = speed;
 		},
 		getWeather: function(dateindex) 
 		{
@@ -108,35 +91,10 @@ define(function(require) {
 				return 4;
 			}
 		},
-		dateToString: function(dateobj) {
-			var year=dateobj.getFullYear().toString();
-			var month=(dateobj.getMonth()+1).toString();
-			var date=dateobj.getDate().toString();
-			if (month.length == 1)
-			{
-				month='0'+month;
-			}
-			if (date.length ==1)
-			{
-				date='0'+date;
-			}
-			return ''+year+month+date;
-		},
-		getdateString: function() {
-			var dateobj = this._date;
-			return this.dateToString(dateobj);
-		},
-		getMonStr: function() {
-			var mon = this._date.getMonth();
-			return this._monthEn[mon].toUpperCase();
-		},
-		getDayStr: function() {
-			return this._date.getDate();
-		},
 		getRealWeather: function(date) {
 			var first = this.getSeason(date);
 			var second = 0;
-			date_str = this.dateToString(date);
+			date_str = dateManager.dateToString(date);
 			if (this._weatherDataContainer[date_str]['forecast']=='sunny')
 			{
 				second=0;
@@ -147,35 +105,24 @@ define(function(require) {
 			}
 			return first.toString()+second.toString();
 		},
-		isChange: function() {
-			if (this._schedule_num%this._speed == 0)
-			{
-				return true;
-			}
-			return false;
-		},
 		getDrawWeather: function(date) {
-			if ( this.isChange())
+			if ( dateManager.isChanged())
 			{
 				this._pic_name = this.getRealWeather(date);
 			}
 			return this._pic_name;
 		},
-		update: function() {
-			this._schedule_num++;
-			this._date = new Date(this._date.getTime()+24*3600*1000);
-			this.dateindex=this.getdateString();
-			this.dateobj = this._date;
-			if (!this._weatherDataContainer[this.dateindex])
+		update: function()
+		{
+			if (this._weatherDataContainer[dateManager.getCurDateStr()])
 			{
-				this.dateobj = this._lastDate;
-				this.dateindex=this.dateToString(this.dateobj);
+				dateManager.setIndexDate(dateManager.getCurDate());
 			}
-			else
-			{
-				this._lastDate = this._date
-			}
+
 		}
 	});
 
+	var weatherManager = new WeatherManager();
+	return weatherManager;
+	//return new WeatherManager();
 });

@@ -1,4 +1,5 @@
 define(function(require) {
+	var dateManager = require('DateManager');
 	var Node = require('models/Node');
 	var Vector = require('lang/Vector');
 	var math = require('util/math');
@@ -27,7 +28,7 @@ define(function(require) {
 			this._color = lc.getColor(this.getLivingDays());
 			if (this.getLivingDays() > 180) {
 				var diedProperbility,
-					date = window.weatherManager.getDateNumber();
+					date = dateManager.getCurDate();
 
 				diedProperbility = (date.getMonth() == 0 && date.getDate() > 20) ? 1 : 0.3;
 				this._isDied = math.random() < diedProperbility ? true : false;

@@ -1,4 +1,5 @@
 define(function(require) {
+	var dateManager = require('DateManager');
 	var LeafColor = function(){
 		
 	};
@@ -14,7 +15,7 @@ define(function(require) {
 			var indexes = this._getRefIndexs(livingDays);
 			
 			if (indexes[0] < 3) {
-				var today = window.weatherManager._date;
+				var today = dateManager.getCurDate();
 				if (today.getMonth()>=11 || today.getMonth()<=1) {
 					return cc.color(191,79,30);
 				}

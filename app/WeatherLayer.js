@@ -1,17 +1,17 @@
 define(function(require) {
 
+	var weatherManager = require('WeatherManager');
+	var dateManager = require('DateManager');
+
 return cc.Layer.extend({
-	_weatherManger: 0,
 	_bg_sprite: 0,
 	_bg_container: {},
 	_out_action: 0,
 	_in_action: 0,
 	_name: 0,
 
-	ctor: function(weatherManger) {
+	ctor: function() {
 		this._super();
-		this._weatherManger = weatherManger
-
 		for (var i=0; i<5; i++)
 		{
 			for (var j=0; j<2; j++)
@@ -27,13 +27,13 @@ return cc.Layer.extend({
 				//this.addChild(bgSprite);
 			}
 		}
-		dateobj = this._weatherManger.dateobj;
-		this._name = this._weatherManger.getRealWeather(dateobj);
+		dateobj = dateManager.getCurDate();
+		this._name = weatherManager.getRealWeather(dateobj);
 		this._bg_sprite = this._bg_container[this._name];
 		this._bg_sprite.setOpacity(1);
 		this.addChild(this._bg_sprite);
-		this._out_action = cc.fadeOut(0.1*this._weatherManger._speed);
-		this._in_action = cc.fadeIn(0.1*this._weatherManger._speed);
+		this._out_action = cc.fadeOut(0.1*dateManager._speed);
+		this._in_action = cc.fadeIn(0.1*dateManager._speed);
 		this._bg_sprite.width=1200;
 		this._bg_sprite.height=900;
 		for (var name in this._bg_container)
@@ -48,14 +48,14 @@ return cc.Layer.extend({
 	},
 	setRealBg: function()
 	{
-		var newName = this._weatherManger.getRealWeather(this._weatherManger.dateobj);
+		var newName = weatherManager.getRealWeather(dateManager.getCurDate());
 		this._name = newName;
 		this._bg_sprite.runAction(this._out_action);
 		this._bg_sprite = this._bg_container[this._name];
 		this._bg_sprite.runAction(this._in_action);		
 	},
-	update: function(dateobj) {
-		var newName = this._weatherManger.getDrawWeather(dateobj);
+	update: function() {
+		var newName = weatherManager.getDrawWeather(dateManager.getIndexDate());
 		if ( newName != this._name )
 		{
 			this._name = newName;
