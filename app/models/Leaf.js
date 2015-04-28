@@ -25,11 +25,11 @@ define(function(require) {
 			this._length = this._maxLength * Math.log(this._age/300+1);
 			var lc = new LeafColor();
 			this._color = lc.getColor(this.getLivingDays());
-			if (this.getLivingDays() > 180) {
-				var diedProperbility,
-					date = window.weatherManager.getDateNumber();
-
-				diedProperbility = (date.getMonth() == 0 && date.getDate() > 20) ? 1 : 0.3;
+			var livingDays = this.getLivingDays();
+			if (livingDays > 180) {
+				var diedProperbility;
+					
+				diedProperbility = 1;
 				this._isDied = math.random() < diedProperbility ? true : false;
 			}			
 			//this._color = cc.color(0, 255 - 30 * Math.log((this._age-1)/100 + 1) , 0);
@@ -38,7 +38,7 @@ define(function(require) {
 			return this._isDied;
 		},
 		render: function(renderer) {this._getPloyVects(renderer)
-			//this._getPloyVects(renderer)
+			this._getPloyVects(renderer)
 			renderer.drawPoly(this._getPloyVects(renderer), this._color, 1, cc.color(0,0,0));
 		},
 		lock: function() {
@@ -49,25 +49,31 @@ define(function(require) {
 				p2,
 				p3,
 				p4,								
-				worldAngle = this.getParent().getWorldAngle(),
-				//angle = (angle < 0 ? worldAngle : -worldAngle) + this._angle + 30,
-				angle = worldAngle - this._angle + 30,
-				v = new Vector(this._length, 0),
-				//offsetAngle = this._angle > 0 ? 90
-				offsetAngle = worldAngle + (worldAngle > 90 ? -90 : 90),
-				offsetAngle = this._angle > 0 ? offsetAngle : offsetAngle + 180;
-				parentWidth = this.getParent().getWidth()/2,
-				offsetVec = new Vector(parentWidth*math.cos(offsetAngle), parentWidth*math.sin(offsetAngle));
+				worldAngle = this.getParent().getWorldAngle(),				
+				basePoint = this.getBasePoint(),
+				normalizedVect = new Vector(1, 0),
+				transformVect,
+				offset = this.getParent().getWidth()/2;
 
-			p1 = Vector.add(this.getBasePoint(), offsetVec);	
-			//renderer.drawDot(p1.toCCPoint(), 1, this._angle < 0 ? cc.color(255,0,0) : cc.color(0,0,255))		
-			v.rotate(this._angle < 0 ? -angle : angle);
-			p2 = Vector.add(p1, v);
-			v.rotate(this._angle < 0 ? 60 : -60);
-			p3 = Vector.add(p2, v);
-			v.rotate(this._angle < 0 ? 120 : -120);
-			p4 = Vector.add(p3, v);
+			
+			normalizedVect.rotate(-worldAngle);
+			offsetVect = normalizedVect.clone();
+			offsetVect.rotate(this._angle>0 ? 90 : -90);
+			offsetVect.mult(offset);
 
+			p1 = Vector.add(basePoint, offsetVect);
+			transformVect = normalizedVect.clone();
+			transformVect.rotate(this._angle);
+			transformVect.rotate(-30);
+			transformVect.mult(this._length);
+			//renderer.drawDot(p1.toCCPoint(), 1, this._angle > 0 ? cc.color(255,0,0) : cc.color(0,0,255))		
+	
+			p2 = Vector.add(p1, transformVect);
+			transformVect.rotate(60);
+			p3 = Vector.add(p2, transformVect);
+			transformVect.rotate(120);
+			p4 = Vector.add(p3, transformVect);
+	
 			return [p1, p2, p3, p4];
 		},
 		getBasePoint: function() {
