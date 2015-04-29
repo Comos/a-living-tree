@@ -4,12 +4,13 @@
 <meta charset="utf-8"/>
 <script src="lib/sea.js"></script>
 <script src="lib/cocos2d-js-v3.3.js"></script>
+<script src="dist/app.pack.min.js"></script>
 </head>
 <body>
 <canvas id="gameCanvas" width="1200" height="900"></canvas>
 <script>
 seajs.config({
-	base: './app'
+	base: '/app'
 });
 seajs.use('main', function(main) {
 	main.start();

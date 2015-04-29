@@ -50,3 +50,5 @@ test.sh
 ehthumbs.db
 Thumbs.db
 *sublime*
+node_modules
+dist
