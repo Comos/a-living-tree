@@ -4,7 +4,6 @@ define(function(require) {
 	var dateManager = require('DateManager');
 
 return cc.Layer.extend({
-	_bg_sprite: 0,
 	_bg_container: {},
 	_out_action: 0,
 	_in_action: 0,
@@ -24,44 +23,38 @@ return cc.Layer.extend({
 				bgSprite.width=1200;
 				bgSprite.height=900;		
 				this._bg_container[this._name] = bgSprite;
-				//this.addChild(bgSprite);
+				this.addChild(bgSprite);
 			}
 		}
 		dateobj = dateManager.getCurDate();
 		this._name = weatherManager.getRealWeather(dateobj);
-		this._bg_sprite = this._bg_container[this._name];
-		this._bg_sprite.setOpacity(1);
-		this.addChild(this._bg_sprite);
-		this._out_action = cc.fadeOut(0.1*dateManager._speed);
-		this._in_action = cc.fadeIn(0.1*dateManager._speed);
-		this._bg_sprite.width=1200;
-		this._bg_sprite.height=900;
-		for (var name in this._bg_container)
-		{
-			if (name == this._name)
-			{
-				continue;
-			}
-			this.addChild(this._bg_container[name]);
-		}
+		bg_sprite = this._bg_container[this._name];
+		bg_sprite.setOpacity(255);
+		this._out_action = cc.fadeOut(0.2*dateManager._speed);
 
 	},
 	setRealBg: function()
 	{
 		var newName = weatherManager.getRealWeather(dateManager.getCurDate());
+		bg_sprite = this._bg_container[this._name];
+		bg_sprite.stopAllActions();
+		bg_sprite.setOpacity(0);
 		this._name = newName;
-		this._bg_sprite.runAction(this._out_action);
-		this._bg_sprite = this._bg_container[this._name];
-		this._bg_sprite.runAction(this._in_action);		
+		bg_sprite = this._bg_container[this._name];
+		bg_sprite.stopAllActions();
+		bg_sprite.setOpacity(255);
 	},
-	update: function() {
+	UpdateStatus: function() {
 		var newName = weatherManager.getDrawWeather(dateManager.getIndexDate());
 		if ( newName != this._name )
 		{
+			bg_sprite = this._bg_container[this._name];
+			bg_sprite.stopAllActions();
+			bg_sprite.runAction(this._out_action);
 			this._name = newName;
-			this._bg_sprite.runAction(this._out_action);
-			this._bg_sprite = this._bg_container[this._name];
-			this._bg_sprite.runAction(this._in_action);			
+			bg_sprite.stopAllActions();
+			bg_sprite = this._bg_container[this._name];
+			bg_sprite.runAction(this._out_action.reverse());
 		}
 	},
 	onEnter: function() {

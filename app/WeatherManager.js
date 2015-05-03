@@ -112,7 +112,7 @@ define(function(require) {
 			}
 			return this._pic_name;
 		},
-		update: function()
+		UpdateStatus: function()
 		{
 			if (this._weatherDataContainer[dateManager.getCurDateStr()])
 			{
@@ -124,5 +124,4 @@ define(function(require) {
 
 	var weatherManager = new WeatherManager();
 	return weatherManager;
-	//return new WeatherManager();
 });

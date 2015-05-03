@@ -42,13 +42,13 @@ var	WeatherInfoLayer = require('WeatherInfoLayer'),
 		this.addChild(this._treeLayer);
 	},
 	pauseCB: function() {
-		this.pause();
+		this.unscheduleAllCallbacks();
 		this._bgLayer.setRealBg();
 		this._ptLayer.setRealParticle();
 		this._treeLayer.pauseTree();
 	},
 	resumeCB: function() {
-		this.resume();
+		this.schedule(this.weatherCB, 0.2, cc.REPEAT_FOREVER, 0);
 		this._treeLayer.resumeTree();
 	},
 	weatherCB: function() {
@@ -56,12 +56,15 @@ var	WeatherInfoLayer = require('WeatherInfoLayer'),
 		{
 			this.unscheduleAllCallbacks();
 		}
-		dateManager.update();
-		weatherManager.update();
+		else
+		{
+			dateManager.UpdateStatus();
+			weatherManager.UpdateStatus();
 
-		this._infoLayer.update();
-		this._bgLayer.update();
-		this._ptLayer.update();
+			this._infoLayer.UpdateStatus();
+			this._bgLayer.UpdateStatus();
+			this._ptLayer.UpdateStatus();
+		}
 	}
 });
 

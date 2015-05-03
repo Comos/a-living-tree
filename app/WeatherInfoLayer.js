@@ -51,7 +51,7 @@ return cc.Layer.extend({
 		this._T_sprite.enableStroke(cc.color(255, 255, 255), 5);
 		this._board_sprite.addChild(this._T_sprite);
 	},
-	update: function() {
+	UpdateStatus: function() {
 		dateindex = dateManager.getIndexDateStr();
 		mon_str = dateManager.getCurMonStrEn();
 		this._month_sprite.setString(mon_str);
