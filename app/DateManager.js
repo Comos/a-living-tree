@@ -61,7 +61,7 @@ define(function(require) {
 		{
 			return this._speed;
 		},
-		update: function() {
+		UpdateStatus: function() {
 			this._scheduleNum++;
 			this._curDateObj = new Date(this._curDateObj.getTime()+24*3600*1000);
 

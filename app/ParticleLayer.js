@@ -140,7 +140,7 @@ return cc.Layer.extend({
 			}
 		}		
 	},
-	update: function() {
+	UpdateStatus: function() {
 		if (dateManager.isChanged())
 		{
 			this.setRealParticle();
